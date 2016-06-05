@@ -6,13 +6,17 @@ import android.os.Bundle;
 
 import com.scnu.hotspicydip.view.GameView;
 
+import java.util.Random;
+
 public class GameViewActivity extends AppCompatActivity implements Runnable {
 
     private GameView gameView = null;
 
     private static final int refreshGap = 40;
 
-    private static final int createNewPelletGap = 2000;
+    private static int createNewPelletGap = 2000;
+
+    private static int createNewPelletGapSeed = 20;
 
     private long beginTimeMillis;
 
@@ -58,6 +62,7 @@ public class GameViewActivity extends AppCompatActivity implements Runnable {
 
         if (cur - last > createNewPelletGap) {
             this.lastCreateTimeMillis = cur;
+            this.createNewPelletGap = new Random().nextInt(createNewPelletGapSeed) * 200 + 500;
             return true;
         }
         return false;
@@ -66,20 +71,26 @@ public class GameViewActivity extends AppCompatActivity implements Runnable {
     private int getSpeedByPassedTimeMillis(long passedTimeMillis) {
 
         if (passedTimeMillis < 10000) {
+            this.createNewPelletGapSeed = 20;
             return 2;
         }
         if (passedTimeMillis >= 10000 && passedTimeMillis < 20000) {
+            this.createNewPelletGapSeed = 17;
             return 4;
         }
         if (passedTimeMillis >= 20000 && passedTimeMillis < 40000){
+            this.createNewPelletGapSeed = 14;
             return 6;
         }
         if (passedTimeMillis >= 40000 && passedTimeMillis < 60000){
+            this.createNewPelletGapSeed = 11;
             return 8;
         }
         if (passedTimeMillis >= 60000 && passedTimeMillis < 80000) {
+            this.createNewPelletGapSeed = 8;
             return 10;
         }
+        this.createNewPelletGapSeed = 5;
         return 12;
     }
 
