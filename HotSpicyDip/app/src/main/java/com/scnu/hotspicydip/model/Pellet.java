@@ -7,8 +7,6 @@ package com.scnu.hotspicydip.model;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.scnu.hotspicydip.constants.Constants;
-
 import java.util.Random;
 
 /**
@@ -17,6 +15,8 @@ import java.util.Random;
 public class Pellet {
 
     private Context context;
+
+    private int screenWidth;
 
     public PelletType pelletType;   //鱼丸类型
 
@@ -27,12 +27,12 @@ public class Pellet {
     public float y;                 //鱼丸当前位置的y坐标
 
 
-    public Pellet(Context context) {
+    public Pellet(int screenWidth) {
 
-        this.context = context;
+        this.screenWidth = screenWidth;
 
         this.pelletType = randomPelletType();
-        this.width = Constants.getPelletWidth(context);
+        this.width = screenWidth / 8;
         this.x = randomOriginX();
         this.y = -this.width;
 
@@ -53,8 +53,7 @@ public class Pellet {
 
     private float randomOriginX() {
 
-        int screenWidth = Constants.getScreenWidth(context);
-        return new Random().nextInt(screenWidth - this.width);
+        return new Random().nextInt(this.screenWidth - this.width);
     }
 
     /***********************getters*************************/
@@ -98,6 +97,11 @@ public class Pellet {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public float moveWithSpeed(float speed) {
+        this.y += speed;
+        return this.y;
     }
 
 }

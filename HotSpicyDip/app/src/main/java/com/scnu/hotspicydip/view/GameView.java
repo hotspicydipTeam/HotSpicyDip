@@ -19,29 +19,53 @@ import java.util.ArrayList;
  */
 public class GameView extends View {
 
-    private Context context;
+    private int screenWidth;
+
+    private int screenHeight;
 
     public ArrayList<Pellet> pellets = new ArrayList<Pellet>();   //当前GameView上的所有鱼丸视图
 
-    public GameView(Context context) {
+    public GameView(Context context, int screenWidth, int screenHeight) {
         super(context);
 
-        this.context = context;
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
         this.setBackgroundColor(Constants.MainBackgroundColor);
-
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        pellets.add(new Pellet(context));
-        pellets.add(new Pellet(context));
-        pellets.add(new Pellet(context));
         Paint paint = new Paint();
         for (Pellet pellet : pellets) {
             paint.setColor(pellet.getBackgroundColor());
-            canvas.drawCircle(pellet.getX(), pellet.getY() + 500, pellet.getWidth() / 2, paint);
+            canvas.drawRect(
+                    pellet.getX(),
+                    pellet.getY(),
+                    pellet.getX() + pellet.getWidth(),
+                    pellet.getY() + pellet.getWidth(),
+                    paint);
         }
     }
+
+    public void moveOn(int speed) {
+
+        ArrayList<Pellet> removePellets = new ArrayList<Pellet>();
+
+        for (Pellet pellet : pellets) {
+            if (pellet.moveWithSpeed(speed) > this.screenHeight) {
+                removePellets.add(pellet);
+            }
+        }
+        for (Pellet pellet : removePellets) {
+            this.pellets.remove(pellet);
+        }
+        removePellets.clear();
+    }
+
+    public void newPellet() {
+        this.pellets.add(new Pellet(this.screenWidth));
+    }
+
 }
