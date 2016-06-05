@@ -10,9 +10,9 @@ public class GameViewActivity extends AppCompatActivity implements Runnable {
 
     private GameView gameView = null;
 
-    private static final int refreshGap = 100;
+    private static final int refreshGap = 40;
 
-    private static final int createNewPelletGap = 5000;
+    private static final int createNewPelletGap = 2000;
 
     private long beginTimeMillis;
 
@@ -66,21 +66,21 @@ public class GameViewActivity extends AppCompatActivity implements Runnable {
     private int getSpeedByPassedTimeMillis(long passedTimeMillis) {
 
         if (passedTimeMillis < 10000) {
-            return 5;
+            return 2;
         }
         if (passedTimeMillis >= 10000 && passedTimeMillis < 20000) {
-            return 8;
+            return 4;
         }
         if (passedTimeMillis >= 20000 && passedTimeMillis < 40000){
-            return 11;
+            return 6;
         }
         if (passedTimeMillis >= 40000 && passedTimeMillis < 60000){
-            return 14;
+            return 8;
         }
         if (passedTimeMillis >= 60000 && passedTimeMillis < 80000) {
-            return 17;
+            return 10;
         }
-        return 20;
+        return 12;
     }
 
     private int getScreenWidth() {
