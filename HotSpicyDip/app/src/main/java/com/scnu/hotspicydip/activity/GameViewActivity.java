@@ -113,16 +113,18 @@ public class GameViewActivity extends AppCompatActivity {
                     lpSkewer.width = lpSkewer.width + temp1;
                     //Log.i("action", ifBunch + "");
                     ivSkewer.setLayoutParams(lpSkewer);
-                    //检测碰撞
-                    Iterator<Pellet> iterator = gameView.pellets.iterator();
-                    while(iterator.hasNext()){
-                        Pellet pellet=iterator.next();
-                        if (ivSkewer.getLeft() >= (pellet.getX() + pellet.getWidth() - 5) &&
-                                ivSkewer.getLeft() <= (pellet.getX() + pellet.getWidth() + 5) &&
-                                (rlControl.getTop() + ivSkewer.getTop()) >= pellet.getY() &&
-                                (rlControl.getTop() + ivSkewer.getTop()) <= (pellet.getY() + pellet.getWidth())) {
-                            Log.i("action",pellet.getPelletType()+"");
-                            iterator.remove();
+                    //在插过去过程中检测碰撞
+                    if(temp1==1) {
+                        Iterator<Pellet> iterator = gameView.pellets.iterator();
+                        while (iterator.hasNext()) {
+                            Pellet pellet = iterator.next();
+                            if (ivSkewer.getLeft() >= (pellet.getX() + pellet.getWidth() - 5) &&
+                                    ivSkewer.getLeft() <= (pellet.getX() + pellet.getWidth() + 5) &&
+                                    (rlControl.getTop() + ivSkewer.getTop()) >= pellet.getY() &&
+                                    (rlControl.getTop() + ivSkewer.getTop()) <= (pellet.getY() + pellet.getWidth())) {
+                                Log.i("action", pellet.getPelletType() + "");
+                                iterator.remove();
+                            }
                         }
                     }
                    /* for (Pellet pellet : gameView.pellets) {
