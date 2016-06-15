@@ -1,12 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fl_game_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.scnu.hotspicydip.activity.GameViewActivity">
 
-</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_control"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_gravity="right|bottom">
+    <FrameLayout
+        android:layout_width="50dp"
+        android:layout_height="5dp"
+        android:padding="2dp"
+        android:id="@+id/fl_charge"
+        android:layout_above="@+id/iv_skewer"
+        android:layout_alignParentRight="true"
+        android:background="#FF8C00">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/charge" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:id="@+id/rl_shield"
+            android:background="#FF8C00"></RelativeLayout>
+    </FrameLayout>
+    <ImageView
+        android:id="@+id/iv_skewer"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="20dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/skewer"/>
+    </RelativeLayout>
+</FrameLayout>

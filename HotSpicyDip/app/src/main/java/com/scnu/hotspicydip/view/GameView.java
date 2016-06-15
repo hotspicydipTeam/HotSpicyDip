@@ -2,6 +2,7 @@ package com.scnu.hotspicydip.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
@@ -30,7 +31,7 @@ public class GameView extends View {
 
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
-        this.setBackgroundColor(Constants.MainBackgroundColor);
+        this.setBackgroundColor(Color.TRANSPARENT);
     }
 
     @Override
@@ -38,6 +39,7 @@ public class GameView extends View {
         super.onDraw(canvas);
 
         Paint paint = new Paint();
+
         for (Pellet pellet : pellets) {
             paint.setColor(pellet.getBackgroundColor());
             canvas.drawRect(
