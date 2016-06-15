@@ -321,7 +321,7 @@ public class GameViewActivity extends AppCompatActivity {
 
         if (cur - last > createNewPelletGap) {
             this.lastCreateTimeMillis = cur;
-            this.createNewPelletGap = new Random().nextInt(createNewPelletGapSeed) * 200 + 500;
+            this.createNewPelletGap = new Random().nextInt(createNewPelletGapSeed) * 200 + 250;
             return true;
         }
         return false;
@@ -330,26 +330,26 @@ public class GameViewActivity extends AppCompatActivity {
     private int getSpeedByPassedTimeMillis(long passedTimeMillis) {
 
         if (passedTimeMillis < 10000) {
-            this.createNewPelletGapSeed = 20;
+            this.createNewPelletGapSeed = 15;
             return 2;
         }
         if (passedTimeMillis >= 10000 && passedTimeMillis < 20000) {
-            this.createNewPelletGapSeed = 17;
+            this.createNewPelletGapSeed = 12;
             return 4;
         }
         if (passedTimeMillis >= 20000 && passedTimeMillis < 40000) {
-            this.createNewPelletGapSeed = 14;
+            this.createNewPelletGapSeed = 10;
             return 6;
         }
         if (passedTimeMillis >= 40000 && passedTimeMillis < 60000) {
-            this.createNewPelletGapSeed = 11;
+            this.createNewPelletGapSeed = 8;
             return 8;
         }
         if (passedTimeMillis >= 60000 && passedTimeMillis < 80000) {
-            this.createNewPelletGapSeed = 8;
+            this.createNewPelletGapSeed = 5;
             return 10;
         }
-        this.createNewPelletGapSeed = 5;
+        this.createNewPelletGapSeed = 3;
         return 12;
     }
 
