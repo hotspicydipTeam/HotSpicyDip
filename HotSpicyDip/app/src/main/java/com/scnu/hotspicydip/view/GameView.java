@@ -1,11 +1,13 @@
 package com.scnu.hotspicydip.view;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
+import com.scnu.hotspicydip.R;
 import com.scnu.hotspicydip.constants.Constants;
 import com.scnu.hotspicydip.model.Pellet;
 
@@ -24,6 +26,8 @@ public class GameView extends View {
 
     private int screenHeight;
 
+    private float bottom_constrain;
+
     public ArrayList<Pellet> pellets = new ArrayList<Pellet>();   //当前GameView上的所有鱼丸视图
 
     public GameView(Context context, int screenWidth, int screenHeight) {
@@ -31,7 +35,8 @@ public class GameView extends View {
 
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
-        this.setBackgroundColor(Color.TRANSPARENT);
+
+        this.bottom_constrain = (float)1540 / (float)1920 * screenHeight;
     }
 
     @Override
@@ -42,12 +47,29 @@ public class GameView extends View {
 
         for (Pellet pellet : pellets) {
             paint.setColor(pellet.getBackgroundColor());
-            canvas.drawRect(
-                    pellet.getX(),
-                    pellet.getY(),
-                    pellet.getX() + pellet.getWidth(),
-                    pellet.getY() + pellet.getWidth(),
-                    paint);
+            switch (pellet.getPelletType()) {
+                case PELLET_TYPE_GREEN:
+                    canvas.drawBitmap(
+                            BitmapFactory.decodeResource(getResources(), R.mipmap.icon_vegetable),
+                            pellet.getX(),
+                            pellet.getY(),
+                            paint);
+                    break;
+                case PELLET_TYPE_BLUE:
+                    canvas.drawBitmap(
+                            BitmapFactory.decodeResource(getResources(), R.mipmap.icon_egg),
+                            pellet.getX(),
+                            pellet.getY(),
+                            paint);
+                    break;
+                case PELLET_TYPE_RED:
+                    canvas.drawBitmap(
+                            BitmapFactory.decodeResource(getResources(), R.mipmap.icon_shrimp),
+                            pellet.getX(),
+                            pellet.getY(),
+                            paint);
+                    break;
+            }
         }
     }
 
@@ -56,7 +78,7 @@ public class GameView extends View {
         ArrayList<Pellet> removePellets = new ArrayList<Pellet>();
 
         for (Pellet pellet : pellets) {
-            if (pellet.moveWithSpeed(speed) > this.screenHeight) {
+            if (pellet.moveWithSpeed(speed) > this.bottom_constrain) {
                 removePellets.add(pellet);
             }
         }

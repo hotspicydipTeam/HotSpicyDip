@@ -1,6 +1,7 @@
 package com.scnu.hotspicydip.activity;
 
 import android.os.Message;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -70,6 +71,8 @@ public class GameViewActivity extends AppCompatActivity {
      */
     private int screenHeight;
     private int screenWidth;
+    //记录蓄力条原始高度
+    private int Sheight;
     //设置flag让竹签插鱼蛋时不移动
     private boolean ifBunch = false;
     /**
@@ -211,29 +214,31 @@ public class GameViewActivity extends AppCompatActivity {
                             if (power == 0) temp = 1;
                             else if (power == 100) temp = -1;
                             power = power + temp;
-                            lpShield.width = (screenWidth / 10 - 4) * (100 - power) / 100;
+                            //lpShield.width = (screenWidth / 10 - 4) * (100 - power) / 100;
+                            lpShield.height=Sheight * (100 - power) / 100;
                             //Log.i("action",lpShield.width+"");
                             rlShield.setLayoutParams(lpShield);
                             //移动的距离
                             float distanceY = event.getRawY() - firstY;
                             //Log.i("action",distanceY+"y");
                             //移动后的坐标
-                            top = (int) (v.getTop() + distanceY);
-                            bottom = (int) (screenHeight - v.getBottom() - distanceY);
+                            top = (int) (ivSkewer.getTop() + distanceY);
+                            bottom = (int) (screenHeight - ivSkewer.getBottom() - distanceY);
 
                             //处理移动后超出屏幕的情况
                             if (top < 0) {
                                 top = 0;
-                                bottom = v.getBottom();
+                                bottom = ivSkewer.getBottom();
                             }
                             if (bottom > screenHeight) {
                                 bottom = screenHeight;
-                                top = v.getTop();
+                                top = ivSkewer.getTop();
                             }
                             //显示图片
-                            lpControl.bottomMargin = bottom;
+                            //Log.i("action",bottom+"");
+                            lpSkewer.bottomMargin = bottom;
                             //Log.i("action",distanceY+"");
-                            rlControl.setLayoutParams(lpControl);
+                            ivSkewer.setLayoutParams(lpSkewer);
                             firstY = event.getRawY();
                             break;
                         case MotionEvent.ACTION_UP:
@@ -284,11 +289,16 @@ public class GameViewActivity extends AppCompatActivity {
         lpCharge = (RelativeLayout.LayoutParams) flCharge.getLayoutParams();
         lpShield = (FrameLayout.LayoutParams) rlShield.getLayoutParams();
         lpControl = (FrameLayout.LayoutParams) rlControl.getLayoutParams();
+        lpCharge.width=screenWidth/8;
+        lpCharge.height= lpCharge.width*707/138;
         lpSkewer.height = screenHeight / 30;
-        lpCharge.width = lpSkewer.width = screenWidth / 10;
-        lpCharge.height = lpCharge.width / 4;
-        lpControl.height = lpCharge.height + lpSkewer.height;
-        rlControl.setLayoutParams(lpControl);
+        lpSkewer.width = screenWidth / 10;
+        Sheight=lpShield.height=lpCharge.height-lpCharge.height*125/707-lpCharge.height*27/707;
+        lpShield.width=lpCharge.width*59/138;
+        lpShield.topMargin=lpCharge.height*27/707;
+        rlShield.setLayoutParams(lpShield);
+        //lpControl.height = lpCharge.height + lpSkewer.height;
+        //rlControl.setLayoutParams(lpControl);
         ivSkewer.setLayoutParams(lpSkewer);
         flCharge.setLayoutParams(lpCharge);
         flGameView.addView(gameView);
@@ -321,7 +331,7 @@ public class GameViewActivity extends AppCompatActivity {
 
         if (cur - last > createNewPelletGap) {
             this.lastCreateTimeMillis = cur;
-            this.createNewPelletGap = new Random().nextInt(createNewPelletGapSeed) * 200 + 250;
+            this.createNewPelletGap = new Random().nextInt(createNewPelletGapSeed) * 200 + 500;
             return true;
         }
         return false;
@@ -330,26 +340,26 @@ public class GameViewActivity extends AppCompatActivity {
     private int getSpeedByPassedTimeMillis(long passedTimeMillis) {
 
         if (passedTimeMillis < 10000) {
-            this.createNewPelletGapSeed = 15;
+            this.createNewPelletGapSeed = 20;
             return 2;
         }
         if (passedTimeMillis >= 10000 && passedTimeMillis < 20000) {
-            this.createNewPelletGapSeed = 12;
+            this.createNewPelletGapSeed = 17;
             return 4;
         }
         if (passedTimeMillis >= 20000 && passedTimeMillis < 40000) {
-            this.createNewPelletGapSeed = 10;
+            this.createNewPelletGapSeed = 14;
             return 6;
         }
         if (passedTimeMillis >= 40000 && passedTimeMillis < 60000) {
-            this.createNewPelletGapSeed = 8;
+            this.createNewPelletGapSeed = 11;
             return 8;
         }
         if (passedTimeMillis >= 60000 && passedTimeMillis < 80000) {
-            this.createNewPelletGapSeed = 5;
+            this.createNewPelletGapSeed = 8;
             return 10;
         }
-        this.createNewPelletGapSeed = 3;
+        this.createNewPelletGapSeed = 5;
         return 12;
     }
 

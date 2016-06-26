@@ -4,14 +4,32 @@
     android:id="@+id/fl_game_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_gameview"
     tools:context="com.scnu.hotspicydip.activity.GameViewActivity">
 
     <RelativeLayout
         android:id="@+id/rl_control"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="match_parent"
         android:layout_gravity="right|bottom">
     <FrameLayout
+        android:id="@+id/fl_charge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/power"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:id="@+id/rl_shield"
+            android:layout_width="40dp"
+            android:layout_height="375dp"
+            android:layout_marginTop="15dp"
+            android:background="@mipmap/pipe"
+            android:layout_gravity="center_horizontal|top"></RelativeLayout>
+    </FrameLayout>
+    <!--<FrameLayout
         android:layout_width="50dp"
         android:layout_height="5dp"
         android:padding="2dp"
@@ -30,7 +48,7 @@
             android:layout_gravity="right"
             android:id="@+id/rl_shield"
             android:background="#FF8C00"></RelativeLayout>
-    </FrameLayout>
+    </FrameLayout>-->
     <ImageView
         android:id="@+id/iv_skewer"
         android:layout_alignParentRight="true"

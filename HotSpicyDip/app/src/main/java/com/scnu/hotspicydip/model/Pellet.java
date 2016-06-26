@@ -53,7 +53,7 @@ public class Pellet {
 
     private float randomOriginX() {
 
-        return new Random().nextInt(this.screenWidth - this.width-this.screenWidth/10);
+        return new Random().nextInt(this.screenWidth - 2*this.width-this.screenWidth/10)+ this.width;
     }
 
     /***********************getters*************************/
