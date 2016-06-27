@@ -48,27 +48,105 @@ public class GameView extends View {
         for (Pellet pellet : pellets) {
             paint.setColor(pellet.getBackgroundColor());
             switch (pellet.getPelletType()) {
-                case PELLET_TYPE_GREEN:
-                    canvas.drawBitmap(
-                            BitmapFactory.decodeResource(getResources(), R.mipmap.icon_vegetable),
-                            pellet.getX(),
-                            pellet.getY(),
-                            paint);
+                case PELLET_TYPE_GREEN: {
+                    switch (pellet.getRotate()) {
+                        case 0:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_vegetable_1),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                        case 1:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_vegetable_2),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                        case 2:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_vegetable_3),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                        case 3:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_vegetable_4),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                    }
                     break;
-                case PELLET_TYPE_BLUE:
-                    canvas.drawBitmap(
-                            BitmapFactory.decodeResource(getResources(), R.mipmap.icon_egg),
-                            pellet.getX(),
-                            pellet.getY(),
-                            paint);
+                }
+                case PELLET_TYPE_BLUE: {
+                    switch (pellet.getRotate()) {
+                        case 0:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_egg_1),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                        case 1:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_egg_2),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                        case 2:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_egg_3),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                        case 3:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_egg_4),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                    }
                     break;
-                case PELLET_TYPE_RED:
-                    canvas.drawBitmap(
-                            BitmapFactory.decodeResource(getResources(), R.mipmap.icon_shrimp),
-                            pellet.getX(),
-                            pellet.getY(),
-                            paint);
+                }
+                case PELLET_TYPE_RED: {
+                    switch (pellet.getRotate()) {
+                        case 0:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_shrimp_1),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                        case 1:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_shrimp_2),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                        case 2:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_shrimp_3),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                        case 3:
+                            canvas.drawBitmap(
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.icon_shrimp_4),
+                                    pellet.getX(),
+                                    pellet.getY(),
+                                    paint);
+                            break;
+                    }
                     break;
+                }
             }
         }
     }

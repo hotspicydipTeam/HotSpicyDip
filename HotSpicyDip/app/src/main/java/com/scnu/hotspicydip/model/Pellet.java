@@ -26,6 +26,7 @@ public class Pellet {
 
     public float y;                 //鱼丸当前位置的y坐标
 
+    private int rotate;             //旋转角度
 
     public Pellet(int screenWidth) {
 
@@ -35,7 +36,7 @@ public class Pellet {
         this.width = screenWidth / 8;
         this.x = randomOriginX();
         this.y = -this.width;
-
+        this.rotate = new Random().nextInt(3);
     }
 
     private PelletType randomPelletType() {
@@ -85,6 +86,10 @@ public class Pellet {
         return Color.BLUE;
     }
 
+    public int getRotate() {
+        return rotate;
+    }
+
     /***********************setters*************************/
 
     public void setPelletType(PelletType pelletType) {
@@ -104,4 +109,7 @@ public class Pellet {
         return this.y;
     }
 
+    public void setRotate(int rotate) {
+        this.rotate = rotate;
+    }
 }
