@@ -75,6 +75,7 @@ public class GameViewActivity extends AppCompatActivity {
     private int Sheight;
     //设置flag让竹签插鱼蛋时不移动
     private boolean ifBunch = false;
+    private boolean lock=false;
     /**
      * 多线程创建
      */
@@ -99,46 +100,42 @@ public class GameViewActivity extends AppCompatActivity {
                 //插鱼蛋动作操作
                 case 1:
                     //伸长竹签
-                    if (lpSkewer.width >= (screenWidth / 10 + screenWidth * 9 * (int) (msg.obj) / 1000)) {
-                        temp1 = -1;
-                        // Log.i("action","1");
-                    } else if (lpSkewer.width <= screenWidth / 10 && temp1 == -1) {
-                        // Log.i("action", 2 + "");
-                        temp1 = 1;
-                        Bunch.interrupt();
-                    } else
-                        ifBunch = true;
-                    if (!Bunch.isAlive()) {
-                        //Log.i("action", "1");
-                        ifBunch = false;
-                        power = 0;
-                    }
                     lpSkewer.width = lpSkewer.width + temp1;
                     //Log.i("action", ifBunch + "");
                     ivSkewer.setLayoutParams(lpSkewer);
                     //在插过去过程中检测碰撞
-                    if(temp1==1) {
+                    if (temp1 == 1) {
                         Iterator<Pellet> iterator = gameView.pellets.iterator();
                         while (iterator.hasNext()) {
                             Pellet pellet = iterator.next();
-                            if (ivSkewer.getLeft() >= (pellet.getX() + pellet.getWidth() - 5) &&
-                                    ivSkewer.getLeft() <= (pellet.getX() + pellet.getWidth() + 5) &&
-                                    (rlControl.getTop() + ivSkewer.getTop()) >= pellet.getY() &&
-                                    (rlControl.getTop() + ivSkewer.getTop()) <= (pellet.getY() + pellet.getWidth())) {
+                            if (ivSkewer.getLeft() >= pellet.getX() &&
+                                    ivSkewer.getLeft() <= (pellet.getX() + pellet.getWidth()) &&
+                                    (ivSkewer.getTop()-lpSkewer.height) >= pellet.getY() &&
+                                    (ivSkewer.getTop()+lpSkewer.height) <= (pellet.getY() + pellet.getWidth())) {
                                 Log.i("action", pellet.getPelletType() + "");
                                 iterator.remove();
                             }
                         }
                     }
-                   /* for (Pellet pellet : gameView.pellets) {
-                        if (ivSkewer.getLeft() >= (pellet.getX() + pellet.getWidth() - 5) &&
-                                ivSkewer.getLeft() <= (pellet.getX() + pellet.getWidth() + 5) &&
-                                (rlControl.getTop() + ivSkewer.getTop()) >= pellet.getY() &&
-                                (rlControl.getTop() + ivSkewer.getTop()) <= (pellet.getY() + pellet.getWidth())) {
-                            Log.i("action",pellet.getPelletType()+"");
-                            gameView.pellets.remove(pellet);
-                        }
-                    }*/
+                    if (lpSkewer.width >= (screenWidth / 10 + screenWidth * 9 * (int) (msg.obj) / 1000)) {
+                        temp1 = -1;
+                        // Log.i("action","1");
+                    } else if (lpSkewer.width <= screenWidth / 10 && temp1 == -1) {
+                        Log.i("control","2");
+                        lock=false;
+                        temp1 = 1;
+                        ifBunch = false;
+                        Bunch.interrupt();
+                    } else if(!ifBunch&&lock){
+                        ifBunch = true;
+                        Log.i("control","1");
+                    }
+
+                    if (!Bunch.isAlive()) {
+                        //Log.i("action", "1");
+                        //ifBunch = false;
+                        power = 0;
+                    }
                     break;
             }
             super.handleMessage(msg);
@@ -149,6 +146,7 @@ public class GameViewActivity extends AppCompatActivity {
         @Override
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
+                //Log.i("control", ifBunch + "");
                 mainHandler.obtainMessage(0).sendToTarget();
                 try {
                     Thread.sleep(refreshGap);
@@ -160,18 +158,24 @@ public class GameViewActivity extends AppCompatActivity {
     });
     //插鱼蛋线程
     private Thread Bunch;
+    //计数器，力量控制速度
+    private int i = 0;
     private Runnable bunchRun = new Runnable() {
         @Override
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
                 //Log.i("action",ifBunch+"");
                 mainHandler.obtainMessage(1, power).sendToTarget();
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    //    Log.i("action","2");
-                    Thread.currentThread().interrupt();
+                if (i >= power/20) {
+                    i = 0;
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        //    Log.i("action","2");
+                        Thread.currentThread().interrupt();
+                    }
                 }
+                i++;
             }
             /*if(Thread.currentThread().isInterrupted()){
               //  Log.i("action","1");
@@ -199,6 +203,7 @@ public class GameViewActivity extends AppCompatActivity {
                 int action = event.getAction();
                 //如果不释放竹签：
                 if (!ifBunch) {
+
                     switch (action) {
                         //按下所处坐标
                         case MotionEvent.ACTION_DOWN:
@@ -209,13 +214,14 @@ public class GameViewActivity extends AppCompatActivity {
                             break;
                         //移动
                         case MotionEvent.ACTION_MOVE:
+                            lock=true;
                             // Log.i("action", 2 + "");
                             //蓄力
                             if (power == 0) temp = 1;
                             else if (power == 100) temp = -1;
                             power = power + temp;
                             //lpShield.width = (screenWidth / 10 - 4) * (100 - power) / 100;
-                            lpShield.height=Sheight * (100 - power) / 100;
+                            lpShield.height = Sheight * (100 - power) / 100;
                             //Log.i("action",lpShield.width+"");
                             rlShield.setLayoutParams(lpShield);
                             //移动的距离
@@ -230,7 +236,7 @@ public class GameViewActivity extends AppCompatActivity {
                                 top = 0;
                                 bottom = ivSkewer.getBottom();
                             }
-                            if (bottom > screenHeight) {
+                            if (bottom < 0) {
                                 bottom = screenHeight;
                                 top = ivSkewer.getTop();
                             }
@@ -249,9 +255,11 @@ public class GameViewActivity extends AppCompatActivity {
                         default:
                             break;
                     }
+                    //这里必须返回true才能相应MotionEvent.ACTION_MOVE
+                    return true;
                 }
-                //这里必须返回true才能相应MotionEvent.ACTION_MOVE
-                return true;
+                else
+                    return false;
             }
 
         });
@@ -289,13 +297,13 @@ public class GameViewActivity extends AppCompatActivity {
         lpCharge = (RelativeLayout.LayoutParams) flCharge.getLayoutParams();
         lpShield = (FrameLayout.LayoutParams) rlShield.getLayoutParams();
         lpControl = (FrameLayout.LayoutParams) rlControl.getLayoutParams();
-        lpCharge.width=screenWidth/8;
-        lpCharge.height= lpCharge.width*707/138;
-        lpSkewer.height = screenHeight / 30;
+        lpCharge.width = screenWidth / 8;
+        lpCharge.height = lpCharge.width * 707 / 138;
+        lpSkewer.height = screenHeight / 50;
         lpSkewer.width = screenWidth / 10;
-        Sheight=lpShield.height=lpCharge.height-lpCharge.height*125/707-lpCharge.height*27/707;
-        lpShield.width=lpCharge.width*59/138;
-        lpShield.topMargin=lpCharge.height*27/707;
+        Sheight = lpShield.height = lpCharge.height - lpCharge.height * 125 / 707 - lpCharge.height * 27 / 707;
+        lpShield.width = lpCharge.width * 59 / 138;
+        lpShield.topMargin = lpCharge.height * 27 / 707;
         rlShield.setLayoutParams(lpShield);
         //lpControl.height = lpCharge.height + lpSkewer.height;
         //rlControl.setLayoutParams(lpControl);
