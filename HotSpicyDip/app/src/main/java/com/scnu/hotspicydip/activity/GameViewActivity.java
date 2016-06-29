@@ -16,6 +16,7 @@ import com.scnu.hotspicydip.R;
 import com.scnu.hotspicydip.model.Pellet;
 import com.scnu.hotspicydip.view.GameView;
 import com.scnu.hotspicydip.view.GetPellet;
+import com.scnu.hotspicydip.view.RoundProgressBar;
 import com.scnu.hotspicydip.view.StringPellet;
 import com.scnu.hotspicydip.view.palletView;
 
@@ -30,7 +31,7 @@ public class GameViewActivity extends AppCompatActivity {
 
     private GameView gameView = null;
 
-    private static final int refreshGap = 40;
+    private static final int refreshGap = 16;
 
     private static int createNewPelletGap = 2000;
 
@@ -61,6 +62,8 @@ public class GameViewActivity extends AppCompatActivity {
     private FrameLayout.LayoutParams lpControl;
 
     private palletView getPellet;
+
+    private RoundProgressBar timeProgressBar;
     /**
      * 记录竹签位置的变量
      */
@@ -122,6 +125,7 @@ public class GameViewActivity extends AppCompatActivity {
                                 Log.i("action", pellet.getPelletType() + "");
                                 it.addPellet(new GetPellet(pellet.getPelletType()));
                                 iterator.remove();
+                                timeProgressBar.setIndex(6000);
                                 getPellet.postInvalidate();
                             }
                         }
@@ -146,6 +150,17 @@ public class GameViewActivity extends AppCompatActivity {
                         power = 0;
                     }
                     break;
+                case 2:
+                    if (timeProgressBar.getIndex() - 1 == 0) {
+                        /**
+                         * GameOver
+                         */
+
+                        timeProgressBar.setIndex(0);
+                    } else {
+                        timeProgressBar.setIndex(timeProgressBar.getIndex() - 1);
+                    }
+                    break;
             }
             super.handleMessage(msg);
         }
@@ -165,6 +180,21 @@ public class GameViewActivity extends AppCompatActivity {
             }
         }
     });
+
+    private Thread timeCountDown = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            while (!Thread.currentThread().isInterrupted()) {
+                mainHandler.obtainMessage(2).sendToTarget();
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    });
+
     //插鱼蛋线程
     private Thread Bunch;
     //计数器，力量控制速度
@@ -199,6 +229,7 @@ public class GameViewActivity extends AppCompatActivity {
         setupSubViews();
         skewerMove();
         hsdDown.start();
+        timeCountDown.start();
     }
 
     /**
@@ -303,6 +334,7 @@ public class GameViewActivity extends AppCompatActivity {
         ivSkewer = (ImageView) findViewById(R.id.iv_skewer);
         flCharge = (FrameLayout) findViewById(R.id.fl_charge);
         getPellet=(palletView)findViewById(R.id.myPalletView);
+        timeProgressBar = (RoundProgressBar) findViewById(R.id.round_time);
         lpSkewer = (RelativeLayout.LayoutParams) ivSkewer.getLayoutParams();
         lpCharge = (RelativeLayout.LayoutParams) flCharge.getLayoutParams();
         lpShield = (FrameLayout.LayoutParams) rlShield.getLayoutParams();
@@ -321,6 +353,7 @@ public class GameViewActivity extends AppCompatActivity {
         flCharge.setLayoutParams(lpCharge);
         flGameView.addView(gameView);
         this.beginTimeMillis = System.currentTimeMillis();
+        this.timeProgressBar.setIndex(6000);
     }
 
 /*    public void run() {
@@ -349,31 +382,57 @@ public class GameViewActivity extends AppCompatActivity {
 
         if (cur - last > createNewPelletGap) {
             this.lastCreateTimeMillis = cur;
-            this.createNewPelletGap = new Random().nextInt(createNewPelletGapSeed) * 200 + 500;
+            this.createNewPelletGap = new Random().nextInt(createNewPelletGapSeed) * 200;
             return true;
         }
         return false;
     }
 
+//    private int getSpeedByPassedTimeMillis(long passedTimeMillis) {
+//
+//        if (passedTimeMillis < 10000) {
+//            this.createNewPelletGapSeed = 20;
+//            return 2;
+//        }
+//        if (passedTimeMillis >= 10000 && passedTimeMillis < 20000) {
+//            this.createNewPelletGapSeed = 18;
+//            return 4;
+//        }
+//        if (passedTimeMillis >= 20000 && passedTimeMillis < 40000) {
+//            this.createNewPelletGapSeed = 16;
+//            return 6;
+//        }
+//        if (passedTimeMillis >= 40000 && passedTimeMillis < 60000) {
+//            this.createNewPelletGapSeed = 14;
+//            return 8;
+//        }
+//        if (passedTimeMillis >= 60000 && passedTimeMillis < 80000) {
+//            this.createNewPelletGapSeed = 12;
+//            return 10;
+//        }
+//        this.createNewPelletGapSeed = 10;
+//        return 12;
+//    }
+
     private int getSpeedByPassedTimeMillis(long passedTimeMillis) {
 
-        if (passedTimeMillis < 10000) {
-            this.createNewPelletGapSeed = 20;
+        if (passedTimeMillis < 5000) {
+            this.createNewPelletGapSeed = 15;
             return 2;
         }
-        if (passedTimeMillis >= 10000 && passedTimeMillis < 20000) {
-            this.createNewPelletGapSeed = 17;
+        if (passedTimeMillis >= 5000 && passedTimeMillis < 10000) {
+            this.createNewPelletGapSeed = 14;
             return 4;
         }
-        if (passedTimeMillis >= 20000 && passedTimeMillis < 40000) {
-            this.createNewPelletGapSeed = 14;
+        if (passedTimeMillis >= 10000 && passedTimeMillis < 15000) {
+            this.createNewPelletGapSeed = 13;
             return 6;
         }
-        if (passedTimeMillis >= 40000 && passedTimeMillis < 60000) {
+        if (passedTimeMillis >= 15000 && passedTimeMillis < 20000) {
             this.createNewPelletGapSeed = 11;
             return 8;
         }
-        if (passedTimeMillis >= 60000 && passedTimeMillis < 80000) {
+        if (passedTimeMillis >= 20000 && passedTimeMillis < 25000) {
             this.createNewPelletGapSeed = 8;
             return 10;
         }

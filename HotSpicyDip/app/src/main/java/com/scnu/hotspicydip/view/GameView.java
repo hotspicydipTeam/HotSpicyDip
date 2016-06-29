@@ -12,6 +12,7 @@ import com.scnu.hotspicydip.constants.Constants;
 import com.scnu.hotspicydip.model.Pellet;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by lxxz on 16/6/2.
@@ -167,7 +168,10 @@ public class GameView extends View {
     }
 
     public void newPellet() {
-        this.pellets.add(new Pellet(this.screenWidth));
+
+        for (int i = 0; i < new Random().nextInt(2) + 1; i ++) {
+            this.pellets.add(new Pellet(this.screenWidth));
+        }
     }
 
 }
