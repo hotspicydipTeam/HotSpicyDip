@@ -15,6 +15,9 @@ import android.widget.RelativeLayout;
 import com.scnu.hotspicydip.R;
 import com.scnu.hotspicydip.model.Pellet;
 import com.scnu.hotspicydip.view.GameView;
+import com.scnu.hotspicydip.view.GetPellet;
+import com.scnu.hotspicydip.view.StringPellet;
+import com.scnu.hotspicydip.view.palletView;
 
 import java.util.Iterator;
 import java.util.Random;
@@ -56,6 +59,8 @@ public class GameViewActivity extends AppCompatActivity {
     private FrameLayout.LayoutParams lpShield;
 
     private FrameLayout.LayoutParams lpControl;
+
+    private palletView getPellet;
     /**
      * 记录竹签位置的变量
      */
@@ -76,6 +81,8 @@ public class GameViewActivity extends AppCompatActivity {
     //设置flag让竹签插鱼蛋时不移动
     private boolean ifBunch = false;
     private boolean lock=false;
+
+    public static StringPellet it = new StringPellet() ;
     /**
      * 多线程创建
      */
@@ -113,7 +120,9 @@ public class GameViewActivity extends AppCompatActivity {
                                     (ivSkewer.getTop()-lpSkewer.height) >= pellet.getY() &&
                                     (ivSkewer.getTop()+lpSkewer.height) <= (pellet.getY() + pellet.getWidth())) {
                                 Log.i("action", pellet.getPelletType() + "");
+                                it.addPellet(new GetPellet(pellet.getPelletType()));
                                 iterator.remove();
+                                getPellet.postInvalidate();
                             }
                         }
                     }
@@ -293,6 +302,7 @@ public class GameViewActivity extends AppCompatActivity {
         rlShield = (RelativeLayout) findViewById(R.id.rl_shield);
         ivSkewer = (ImageView) findViewById(R.id.iv_skewer);
         flCharge = (FrameLayout) findViewById(R.id.fl_charge);
+        getPellet=(palletView)findViewById(R.id.myPalletView);
         lpSkewer = (RelativeLayout.LayoutParams) ivSkewer.getLayoutParams();
         lpCharge = (RelativeLayout.LayoutParams) flCharge.getLayoutParams();
         lpShield = (FrameLayout.LayoutParams) rlShield.getLayoutParams();
